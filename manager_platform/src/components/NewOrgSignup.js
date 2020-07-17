@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 const NewOrgSignup = () => {
   const handleOrgSubmit = (vals) => (e) => {
     e.preventDefault();
-
-    console.log(vals);
   }
 
   return (
