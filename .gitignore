@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+manager_platform/node_modules
+manager_platform/.pnp
+manager_platform/.pnp.js
+
+# testing
+manager_platform/coverage
+
+# production
+manager_platform/build
+
+# misc
+manager_platform/.DS_Store
+manager_platform/.env.local
+manager_platform/.env.development.local
+manager_platform/.env.test.local
+manager_platform/.env.production.local
+
+manager_platform/npm-debug.log*
+manager_platform/yarn-debug.log*
+manager_platform/yarn-error.log*
