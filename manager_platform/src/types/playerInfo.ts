@@ -12,7 +12,7 @@ export type PlayerInfo = {
   
   // Trainable Stats
   overall: number;
-  agression: number;
+  proactive: number;
   mechanics: number;
   safety: number;
   awareness: number;
@@ -23,5 +23,9 @@ export type PlayerInfo = {
 }
 
 export enum Region {
-  'KOR', 'NA', 'EU', 'JP', 'CHN'
+  'KOR' = 'KOR',
+  'NA' = 'NA',
+  'EU' = 'EU',
+  'JP' = 'JP',
+  'CHN' = 'CHN'
 }
