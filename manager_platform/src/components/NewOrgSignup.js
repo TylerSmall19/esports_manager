@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 
 const NewOrgSignup = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const handleOrgSubmit = (vals) => (e) => {
     e.preventDefault();
+
+    console.log(vals, e);
   }
 
   return (
     <div>
       <h3>First, let's get some basics about your Org</h3>
       <br />
-      <NewOrgDetails onSubmit={handleOrgSubmit} />
+      {!isSubmitted ? <NewOrgDetails onSubmit={handleOrgSubmit} /> : null }
     </div>
   );
 };
