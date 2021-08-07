@@ -1,12 +1,19 @@
 .playerHeader {
   font-size:larger;
-  color:whitesmoke;
+  color:black;
 }
 
 .playerContainer {
   width: 60%;
   margin: auto;
-  background-color: chocolate;
   padding: 25px;
   margin-top: 15px;
+  background-color: white;
+}
+
+.playerStat {
+  margin-left: 2.5px;
+  margin-right: 2.5px;
+  background: white;
+  padding: 2px;
 }
