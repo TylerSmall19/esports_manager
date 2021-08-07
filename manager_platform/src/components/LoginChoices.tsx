@@ -1,5 +1,6 @@
 import React from 'react';
-import { PlayerInfoList } from './playerScouting/playerInfoList';
+// @ts-ignore
+import { PlayerInfoList } from './playerScouting/playerInfoList.tsx';
 
 const LoginChoices = (props : any) => {
 
