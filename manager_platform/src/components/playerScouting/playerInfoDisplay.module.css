@@ -1,0 +1,13 @@
+.playerHeader {
+  text-align: left;
+  font-size:larger;
+  color:whitesmoke;
+}
+
+.playerContainer {
+  width: 60%;
+  margin: auto;
+  background-color: chocolate;
+  padding: 25px;
+  margin-top: 15px;
+}
