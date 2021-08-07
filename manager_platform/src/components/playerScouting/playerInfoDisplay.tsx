@@ -9,7 +9,7 @@ type PlayerProps = {
 export const PlayerInfoDisplay = ({player}: PlayerProps) => {
   return (
     <div className={styles.playerContainer}>
-      <h3 className={styles.playerHeader}>{player.name} aka {player.ign}</h3>
+      <h3 className={styles.playerHeader}>{player.firstName} "{player.ign}" {player.lastName}</h3>
     </div>
   );
 };
