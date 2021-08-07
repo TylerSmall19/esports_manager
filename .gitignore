@@ -2,9 +2,11 @@
 
 # dependencies
 manager_platform/node_modules
-manager_api/node_modules
 manager_platform/.pnp
 manager_platform/.pnp.js
+
+manager_api/node_modules
+manager_api/dist
 
 # testing
 manager_platform/coverage
