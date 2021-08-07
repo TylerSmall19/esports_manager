@@ -50,3 +50,8 @@ export const styleStatNumber = (stat: number, isPositive: boolean = true) : Reac
     </span>
   )
 }
+
+export const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD'
+});

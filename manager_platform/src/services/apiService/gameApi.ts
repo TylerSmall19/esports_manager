@@ -5,7 +5,7 @@ const mockPlayers : PlayerInfo[] = [
     id: '1',
     firstName: 'Ronald',
     lastName: 'Weasel',
-    agression: 35,
+    proactive: 35,
     awareness: 45,
     ego: 20,
     ign: 'Ron Styles On U',
@@ -14,13 +14,14 @@ const mockPlayers : PlayerInfo[] = [
     nerves: 65,
     overall: 54,
     region: Region.EU,
-    safety: 80
+    safety: 80,
+    salary: 80000
   },
   {
     id: '2',
     firstName: 'Hary',
     lastName: 'Potterswheel',
-    agression: 65,
+    proactive: 65,
     awareness: 60,
     ego: 55,
     ign: 'Har Har Har',
@@ -29,7 +30,8 @@ const mockPlayers : PlayerInfo[] = [
     nerves: 22,
     overall: 85,
     region: Region.EU,
-    safety: 65
+    safety: 65,
+    salary: 160000
   },
 ];
 

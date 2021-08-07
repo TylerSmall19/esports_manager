@@ -17,3 +17,9 @@
   background: white;
   padding: 2px;
 }
+
+.playerSalary {
+  font-weight: 750;
+  margin-top: 15px;
+  display: inline-block;
+}

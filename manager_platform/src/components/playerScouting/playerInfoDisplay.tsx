@@ -1,5 +1,5 @@
 import React from 'react';
-import { styleStatNumber } from '../../helpers/formatting/statFormattingHelper';
+import { currencyFormatter, styleStatNumber } from '../../helpers/formatting/statFormattingHelper';
 import { PlayerInfo } from '../../types/playerInfo';
 import styles from './playerInfoDisplay.module.css';
 
@@ -44,6 +44,8 @@ export const PlayerInfoDisplay = ({player}: PlayerProps) => {
         Leadership: {styleStatNumber(player.leadership)}
       </span>
 
+      <br />
+
       {/* TODO: Work on player traits */}
       {/* <span>
         {
@@ -51,6 +53,8 @@ export const PlayerInfoDisplay = ({player}: PlayerProps) => {
           player.traits.map(t => )
         }
       </span> */}
+
+      <span className={styles.playerSalary}>{currencyFormatter.format(player.salary)}</span>
     </div>
   );
 };

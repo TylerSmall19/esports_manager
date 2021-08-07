@@ -9,6 +9,7 @@ export type PlayerInfo = {
   // Non-Trainable Stats
   nerves: number;
   ego: number;
+  salary: number;
   
   // Trainable Stats
   overall: number;
