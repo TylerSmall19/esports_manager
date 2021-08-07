@@ -1,7 +1,8 @@
 export type PlayerInfo = {
   // Static info
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   ign: string;
   region: Region;
   
