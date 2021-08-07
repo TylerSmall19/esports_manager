@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { LoginChoices } from './components/LoginChoices';
+import { LoginChoices } from './components/LoginChoices.tsx';
 import { NewOrgSignup } from './components/NewOrgSignup';
 import { signupTypes } from './constants';
 import { NewTeamSignup } from './components/NewTeamSignup';
