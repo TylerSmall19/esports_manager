@@ -12,6 +12,9 @@ export class PlayerInfo {
   stats : PlayerStats = new PlayerStats();
 
   statsCount: number = Object.keys(this.stats).length;
+
+  // metaInfo
+  scoutable?: boolean
 }
 
 class PlayerStats {
