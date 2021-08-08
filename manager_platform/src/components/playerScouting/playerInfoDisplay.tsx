@@ -1,6 +1,6 @@
 import React from 'react';
 import { currencyFormatter, styleStatNumber } from '../../helpers/formatting/statFormattingHelper';
-import { PlayerInfo } from '../../types/playerInfo';
+import { PlayerInfo, PlayerStat } from '../../types/playerInfo';
 import styles from './playerInfoDisplay.module.css';
 
 type PlayerProps = {
@@ -14,7 +14,15 @@ export const PlayerInfoDisplay = ({player}: PlayerProps) => {
       
       <hr />
 
-      <span className={styles.playerStat}>
+      {Object.keys(player.stats).map(key => {
+        // @ts-ignore
+        const stat : PlayerStat = player.stats[key];
+        return (<span className={styles.playerStat}>
+          {stat.displayName}: {styleStatNumber(stat.value, stat.isPositive)}
+        </span>)
+      })}
+
+      {/* <span className={styles.playerStat}>
         Nerves: {styleStatNumber(player.nerves, false)}
       </span>
       |
@@ -42,7 +50,7 @@ export const PlayerInfoDisplay = ({player}: PlayerProps) => {
 
       <span className={styles.playerStat}>
         Leadership: {styleStatNumber(player.leadership)}
-      </span>
+      </span> */}
 
       <br />
 
