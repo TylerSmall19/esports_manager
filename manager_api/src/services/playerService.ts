@@ -22,7 +22,7 @@ const baseSalary = 125000;
 const salaryModifier = 50;
 
 export const calculateSalary = (player : PlayerInfo) : number => {
-  // Salary is the (overall / 5) * baseSalary (125,000)
+  // Salary is the (overall / modifier) * baseSalary (125,000)
   return (player.overall / salaryModifier) * baseSalary;
 }
 
