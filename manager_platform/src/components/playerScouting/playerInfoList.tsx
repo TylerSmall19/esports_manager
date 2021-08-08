@@ -5,21 +5,18 @@ import { PlayerInfoDisplay } from './playerInfoDisplay';
 import styles from './playerInfoList.module.css';
 
 export const PlayerInfoList = () => {
-  const initialPlayers :PlayerInfo[] = [];
+  const initialPlayers :PlayerInfo[] | undefined = [];
   const [players, setPlayers] = useState(initialPlayers);
-
-  const [initialized, setInitialized] = useState(false);
 
   const setPlayersList = async () => {
     const list = await GameApi.getPlayerList();
-    setPlayers(list);
-    setInitialized(true);
+    if (list)
+      setPlayers(list);
   };
 
   useEffect(() => {
-    if (!initialized)
-      setPlayersList();
-  });
+    setPlayersList();
+  }, []);
 
   return (
     <div className={styles.container}>
