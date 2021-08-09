@@ -1,17 +1,14 @@
-import { InsertManyResult } from "mongodb";
+import { InsertManyResult, InsertOneResult } from "mongodb";
 import { PlayerInfo } from "../../types/playerInfo";
-import { ProjectLogger } from "../loggingService";
-import { MongoClient } from 'mongodb';
+import { BaseDbService } from "./baseDbService";
 
-class ScoutablePlayersDatabaseService {
-  databaseClient: MongoClient;
-  logger: ProjectLogger;
-  collectionName: string = 'players';
-  dbName: string = 'NPCPlayers'
+class ScoutablePlayersDatabaseService extends BaseDbService{
 
   constructor () {
-    this.databaseClient = new MongoClient(process.env.MONGO_CONNECTION);
-    this.logger = new ProjectLogger();
+    super()
+
+    this.collectionName = 'NPCPlayers';
+    this.dbName = 'players';
   }
 
   public async saveNewPlayers(players: PlayerInfo[]) : Promise<boolean> {
@@ -35,7 +32,7 @@ class ScoutablePlayersDatabaseService {
       }
   }
 
-  public async getScoutablePlayers() : Promise<PlayerInfo[] | undefined> {
+  public async getScoutablePlayers() : Promise<PlayerInfo[]> {
     try {
       await this.databaseClient.connect();
 
@@ -47,19 +44,8 @@ class ScoutablePlayersDatabaseService {
     }
     catch (err) {
       this.logger.logError(`Error saving: ${JSON.stringify(err)}`);
-      return;
+      return null;
     }
-  }
-
-  private _wasSuccess(res : InsertManyResult) : boolean {
-    if (res.insertedCount > 0) {
-      this.logger.logInfo(`Successfully inserted ${res.insertedCount} row(s)!`);
-      return true;
-    }
-  }
-
-  private _addCreatedDates(item : PlayerInfo) {
-    return {...item, createdAtDate: new Date()};
   }
 }
 
