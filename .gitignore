@@ -5,6 +5,9 @@ manager_platform/node_modules
 manager_platform/.pnp
 manager_platform/.pnp.js
 
+manager_api/node_modules
+manager_api/dist
+
 # testing
 manager_platform/coverage
 
@@ -17,6 +20,7 @@ manager_platform/.env.local
 manager_platform/.env.development.local
 manager_platform/.env.test.local
 manager_platform/.env.production.local
+manager_api/.env
 
 manager_platform/npm-debug.log*
 manager_platform/yarn-debug.log*
