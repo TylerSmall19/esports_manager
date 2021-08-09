@@ -1,6 +1,6 @@
 export class PlayerInfo {
   // Static info
-  id: string = '';
+  _id: string = '';
 
   firstName: string = '';
   lastName: string = '';
