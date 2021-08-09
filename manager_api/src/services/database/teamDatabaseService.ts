@@ -1,24 +1,24 @@
 import { BaseDbService } from "./baseDbService";
-import { Org } from "../../types/org";
+import { Team } from "../../types/team";
 import { ObjectId } from "mongodb";
 import { ScoutablePlayersDatabaseService } from "./scoutablePlayerDatabaseService";
 
-export class OrgDatabaseService extends BaseDbService{
+export class TeamDatabaseService extends BaseDbService{
 
   constructor () {
     super()
 
     this._dbName = 'UserControlled';
-    this._collectionName = 'orgs';
+    this._collectionName = 'teams';
   }
 
-  async saveNewOrg (org : Org) : Promise<boolean> {
+  async saveNewTeam (team : Team) : Promise<boolean> {
     try {
       await this._databaseClient.connect();
       const collection = this._databaseClient.db(this._dbName).collection(this._collectionName);
 
-      org = this._addCreatedDates(org);
-      const result = await collection.insertMany([org]);
+      team = this._addCreatedDates(team);
+      const result = await collection.insertMany([team]);
 
       return(this._wasSuccess(result));
     }
@@ -32,7 +32,7 @@ export class OrgDatabaseService extends BaseDbService{
   }
 
   // TODO: Ensure players cannot be scouted to other rosters
-  async addPlayersToRoster (orgId : string, playersToAdd : string[]) : Promise<boolean> {
+  async addPlayersToRoster (teamId : string, playersToAdd : string[]) : Promise<boolean> {
     try {
       const playerService = new ScoutablePlayersDatabaseService();
 
@@ -41,7 +41,7 @@ export class OrgDatabaseService extends BaseDbService{
 
       await playerService.setManyPlayerScoutableStatus(playersToAdd, false);
 
-      const result = await collection.updateOne({ _id: new ObjectId(orgId) }, {$set: { playerIds: playersToAdd, updatedAt: new Date() } });
+      const result = await collection.updateOne({ _id: new ObjectId(teamId) }, {$set: { playerIds: playersToAdd, updatedAt: new Date() } });
 
       return (result.modifiedCount > 0);
     }

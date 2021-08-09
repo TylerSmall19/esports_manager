@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 
-export class Org {
+export class Team {
   _id: ObjectId;
   // _ownerId: string;
 

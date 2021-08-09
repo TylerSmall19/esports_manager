@@ -3,8 +3,7 @@ import express from "express";
 import cors from 'cors';
 import { ScoutablePlayersDatabaseService } from "./services/database/scoutablePlayerDatabaseService";
 import { config as configEnv } from "dotenv";
-import { OrgDatabaseService } from "./services/database/orgDatabaseService";
-import { ObjectId } from "mongodb";
+import { TeamDatabaseService } from "./services/database/teamDatabaseService";
 
 configEnv();
 
@@ -23,9 +22,9 @@ app.get('/players/scoutingList', async ( req, res ) => {
     res.json(dbRes);
 });
 
-app.post('/orgs', async (req, res) => {
-    const db = new OrgDatabaseService();
-    const dbRes = await db.saveNewOrg(req.body);
+app.post('/teams', async (req, res) => {
+    const db = new TeamDatabaseService();
+    const dbRes = await db.saveNewTeam(req.body);
 
     if (dbRes)
         res.status(201);
@@ -35,9 +34,9 @@ app.post('/orgs', async (req, res) => {
     res.send();
 });
 
-app.post('/orgs/:orgId/players', async (req, res) => {
-    const db = new OrgDatabaseService();
-    const dbRes = await db.addPlayersToRoster(req.params.orgId, req.body.players);
+app.post('/teams/:teamId/players', async (req, res) => {
+    const db = new TeamDatabaseService();
+    const dbRes = await db.addPlayersToRoster(req.params.teamId, req.body.players);
 
     if (dbRes)
         res.status(201)
