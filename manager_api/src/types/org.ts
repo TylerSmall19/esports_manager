@@ -3,7 +3,7 @@ import { PlayerInfo } from "./playerInfo";
 
 export class Org {
   _id: ObjectId;
-  _ownerId: string;
+  // _ownerId: string;
 
   name: string;
   tag: string;
