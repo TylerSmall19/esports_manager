@@ -1,5 +1,4 @@
 import { ObjectId } from "mongodb";
-import { PlayerInfo } from "./playerInfo";
 
 export class Org {
   _id: ObjectId;
@@ -9,5 +8,5 @@ export class Org {
   tag: string;
   ownerName: string;
 
-  players?: PlayerInfo[] = [];
+  playerIds?: string[] = [];
 }
