@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 const NewOrgSignup = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleOrgSubmit = (vals) => (e) => {
+  const handleOrgSubmit = (vals : any) => (e : Event) => {
     e.preventDefault();
 
     console.log(vals, e);
@@ -18,13 +18,19 @@ const NewOrgSignup = () => {
   );
 };
 
-const NewOrgDetails = (props) => {
+type FormValues = {
+  orgName: string;
+  ownerName: string;
+}
+
+const NewOrgDetails = (props : any) => {
   const { onSubmit } = props;
+  const initialState : FormValues = { orgName: '', ownerName: '' };
 
-  const [formState, setFormState] = useState({});
+  const [formState, setFormState] = useState<FormValues>(initialState);
 
-  const setValue = (e) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+  const setValue = (e : any) => {
+    setFormState({ ...formState, [e.target?.name]: e.target.value });
   }
 
   return (
