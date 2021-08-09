@@ -18,7 +18,7 @@ const App = () => {
     <Router>
       <div className="App">
         <LoginChoices />
-        
+
         <Switch>
           <Route path={appRoutes.players.scouting} component={PlayerInfoList} />
 
