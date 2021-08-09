@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import { LoginChoices } from './components/LoginChoices.tsx';
 import { NewOrgSignup } from './components/teamCreation/NewOrgSignup.tsx';
@@ -9,8 +9,11 @@ import {
 } from "react-router-dom";
 import { PlayerInfoList } from './components/playerScouting/playerInfoList';
 import { appRoutes } from './constants.ts';
+import { SessionService } from './services/session/sessionService';
 
 const App = () => {
+  SessionService.login();
+
   return (
     <Router>
       <div className="App">
