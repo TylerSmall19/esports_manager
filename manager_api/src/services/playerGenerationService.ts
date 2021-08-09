@@ -7,12 +7,12 @@ const generatePlayerInfo = (playerToGenerate: PlayerInfo, region : Region) => {
   playerToGenerate.lastName = faker.name.lastName();
   playerToGenerate.salary = calculateSalary(playerToGenerate);
   playerToGenerate.region = region;
+  playerToGenerate.scoutable = true;
 
   return playerToGenerate;
 };
 
-// @ts-ignore
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
+const reducer = (accumulator : any, currentValue : any) => accumulator + currentValue;
 
 const calculateOverall = (positiveValues : number[], negativeValues : number[], count : number) : number => {
   return Math.round((positiveValues.reduce(reducer, 0) + negativeValues.reduce(reducer, 0)) / count);
