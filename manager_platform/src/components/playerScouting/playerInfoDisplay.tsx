@@ -17,40 +17,10 @@ export const PlayerInfoDisplay = ({player}: PlayerProps) => {
       {Object.keys(player.stats).map(key => {
         // @ts-ignore
         const stat : PlayerStat = player.stats[key];
-        return (<span className={styles.playerStat}>
+        return (<span key={key} className={styles.playerStat}>
           {stat.displayName}: {styleStatNumber(stat.value, stat.isPositive)}
         </span>)
       })}
-
-      {/* <span className={styles.playerStat}>
-        Nerves: {styleStatNumber(player.nerves, false)}
-      </span>
-      |
-      <span className={styles.playerStat}>
-        Ego: {styleStatNumber(player.ego, false)}
-      </span>
-      
-      <br />
-
-      <span className={styles.playerStat}>
-        Proactivity: {styleStatNumber(player.proactive)}
-      </span>
-
-      <span className={styles.playerStat}>
-        Mechanics: {styleStatNumber(player.mechanics)}
-      </span>
-
-      <span className={styles.playerStat}>
-        Safety: {styleStatNumber(player.safety)}
-      </span>
-
-      <span className={styles.playerStat}>
-        Awareness: {styleStatNumber(player.awareness)}
-      </span>
-
-      <span className={styles.playerStat}>
-        Leadership: {styleStatNumber(player.leadership)}
-      </span> */}
 
       <br />
 
