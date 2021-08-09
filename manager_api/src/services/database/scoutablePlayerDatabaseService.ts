@@ -1,6 +1,6 @@
 import { InsertManyResult } from "mongodb";
-import { PlayerInfo } from "../types/playerInfo";
-import { ProjectLogger } from "./loggingService";
+import { PlayerInfo } from "../../types/playerInfo";
+import { ProjectLogger } from "../loggingService";
 import { MongoClient } from 'mongodb';
 
 class ScoutablePlayersDatabaseService {
