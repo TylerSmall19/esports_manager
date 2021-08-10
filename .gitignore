@@ -5,7 +5,7 @@
 manager_platform/.pnp
 manager_platform/.pnp.js
 
-manager_api/dist
+*/dist
 
 # testing
 manager_platform/coverage
