@@ -11,6 +11,7 @@ const apiRoutes = {
   getTeamById: (id: string) => `${baseUrl}/teams/${id}`,
   addPlayersToTeam: (teamId: string) => `${baseUrl}/teams/${teamId}/players`,
   addNewTeam: () => `${baseUrl}/teams`,
+  getTeamPlayersById: (teamId: string) => `${baseUrl}/teams/${teamId}/players`
 }
 
 export class GameApi {
@@ -62,6 +63,16 @@ export class GameApi {
       // Returns true if it's in success range (2XX)
       if (res.status >= 200 && res.status < 300)
         return res.data.playerIds
+    }
+    catch (ex) {
+      console.error('An unexpected  error has occured: ', ex);
+    }
+  }
+
+  static async getPlayersByTeamId(teamId: string) : Promise<PlayerInfo[] | undefined> {
+    try {
+      const res = await axios.get<PlayerInfo[]>(apiRoutes.getTeamPlayersById(teamId));
+      return res.data;
     }
     catch (ex) {
       console.error('An unexpected  error has occured: ', ex);
