@@ -56,7 +56,14 @@ export const PlayerInfoList = () => {
             player={player}
             activeTeam={activeTeam}
             recruitButtonClicked={handleRecruitButtonClick}
-          />
+          >
+            {/* Add some checks to make sure the players can't recruit past 5 members client side */}
+            {
+              activeTeam
+                && handleRecruitButtonClick
+                && <button disabled={ GameApi.teamIsAtMaxPlayers(activeTeam) } onClick={handleRecruitButtonClick(player)}>Recruit Player to {activeTeam?.name}</button>
+            }
+          </PlayerInfoDisplay>
         );
       })}
     </div>
