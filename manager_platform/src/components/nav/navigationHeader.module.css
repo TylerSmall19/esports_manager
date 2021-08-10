@@ -1,0 +1,16 @@
+.navLink {
+  color: black;
+  text-decoration: none;
+  padding: 3px;
+  border: solid rgb(199, 193, 193) 1px;
+  border-radius: 3px;
+  background-color: blanchedalmond;
+}
+.navLink:visited {
+  color: black;
+}
+.navLink:hover {
+  background-color: rgb(250, 203, 132);
+  border: solid rgb(226, 220, 220) 1px;
+  color: white;
+}

@@ -7,12 +7,13 @@ export const appRoutes = {
   root: '/',
   players: {
     root: '/players/',
-    scouting: '/players/scouting'
+    scouting: '/players/scouting',
   },
-  orgs: {
-    root: '/orgs/',
-    signUp: '/orgs/new'
-  }
+  teams: {
+    root: '/teams/',
+    signUp: '/teams/new',
+    viewActiveTeam: '/teams/active'
+  },
 }
 
 export const MAX_PLAYERS = 5;
