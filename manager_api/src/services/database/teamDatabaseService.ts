@@ -12,7 +12,7 @@ export class TeamDatabaseService extends BaseDbService{
     this._collectionName = 'teams';
   }
 
-  async saveNewTeam (team : Team) : Promise<boolean> {
+  async saveNewTeam (team : Team) : Promise<string> {
     try {
       await this._databaseClient.connect();
       const collection = this._databaseClient.db(this._dbName).collection(this._collectionName);
@@ -20,7 +20,7 @@ export class TeamDatabaseService extends BaseDbService{
       team = this._addCreatedDates(team);
       const result = await collection.insertMany([team]);
 
-      return(this._wasSuccess(result));
+      return this._wasSuccess(result) ? result.insertedIds[0].toString() : null;
     }
     catch (err) {
       this._logger.logError(`Error saving: ${JSON.stringify(err)}`);
@@ -32,7 +32,8 @@ export class TeamDatabaseService extends BaseDbService{
   }
 
   // TODO: Ensure players cannot be scouted to other rosters
-  async addPlayersToRoster (teamId : string, playersToAdd : string[]) : Promise<boolean> {
+  // Returns an array of the players added
+  async addPlayersToRoster (teamId : string, playersToAdd : string[]) : Promise<string[]> {
     try {
       const playerService = new ScoutablePlayersDatabaseService();
 
@@ -43,12 +44,13 @@ export class TeamDatabaseService extends BaseDbService{
 
       const result = await collection.updateOne({ _id: new ObjectId(teamId) }, {$set: { playerIds: playersToAdd, updatedAt: new Date() } });
 
-      return (result.modifiedCount > 0);
+      if (result.modifiedCount > 0)
+        return (playersToAdd);
     }
     catch (err) {
       this._logger.logError(`Error saving: ${JSON.stringify(err)}`);
       return null;
-    } 
+    }
     finally {
       this._databaseClient.close();
     }

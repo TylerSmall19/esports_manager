@@ -27,7 +27,7 @@ app.post('/teams', async (req, res) => {
     const dbRes = await db.saveNewTeam(req.body);
 
     if (dbRes)
-        res.status(201);
+        res.json({ teamId: dbRes });
     else
         res.status(errorCode);
 
@@ -39,7 +39,7 @@ app.post('/teams/:teamId/players', async (req, res) => {
     const dbRes = await db.addPlayersToRoster(req.params.teamId, req.body.players);
 
     if (dbRes)
-        res.status(201)
+        res.json({ playerIds: dbRes });
     else
         res.status(errorCode);
 
