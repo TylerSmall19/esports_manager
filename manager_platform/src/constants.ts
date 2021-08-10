@@ -14,3 +14,5 @@ export const appRoutes = {
     signUp: '/orgs/new'
   }
 }
+
+export const MAX_PLAYERS = 5;
