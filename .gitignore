@@ -1,11 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-manager_platform/node_modules
+*/node_modules
 manager_platform/.pnp
 manager_platform/.pnp.js
 
-manager_api/node_modules
 manager_api/dist
 
 # testing
