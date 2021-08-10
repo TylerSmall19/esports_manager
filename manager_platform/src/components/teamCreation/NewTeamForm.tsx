@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { GameApi } from '../../services/apiService/gameApi';
+import { SessionService } from '../../services/session/sessionService';
+import { NewTeamFormValues } from './types/newTeamFormValues';
 
 const NewTeamSignup = () => {
-  const handleTeamSubmit = (vals : any) => (e : Event) => {
+  const handleTeamSubmit = (vals : NewTeamFormValues) => async (e : Event) => {
     e.preventDefault();
-
-    console.log(vals);
+    const newTeamId = await (GameApi.addNewTeam(vals));
+    if (newTeamId)
+      SessionService.setUsersActiveTeam(newTeamId);
   }
 
   return (
@@ -16,17 +20,11 @@ const NewTeamSignup = () => {
   );
 };
 
-type FormValues = {
-  name: string;
-  ownerName: string;
-  tag: string;
-}
-
 const NewTeamDetails = (props : any) => {
   const { onSubmit } = props;
-  const initialState : FormValues = { name: '', ownerName: '', tag: '' };
+  const initialState = { };
 
-  const [formState, setFormState] = useState<FormValues>(initialState);
+  const [formState, setFormState] = useState(initialState as NewTeamFormValues);
 
   const setValue = (e : any) => {
     setFormState({ ...formState, [e.target?.name]: e.target.value });

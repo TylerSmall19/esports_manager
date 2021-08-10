@@ -3,7 +3,7 @@ const _userIdKey = 'userId';
 const _tokenKey = 'authToken';
 
 const login = (userName : string, password: string) : boolean => {
-  window.localStorage.setItem(_teamIdKey, '6111bbb445dcfdcb09f786bf');
+  setUsersActiveTeam('6111ec9812962f1f2664e555');
   // TODO: Make these real values
   window.localStorage.setItem(_userIdKey, '1_Tyler');
   window.localStorage.setItem(_tokenKey, 'token');
@@ -19,10 +19,15 @@ const logOut = () : boolean => {
 
 const getTeamId = () : string | null => {
   return window.localStorage.getItem(_teamIdKey);
-} 
+}
+
+const setUsersActiveTeam = (teamId: string) : void => {
+  window.localStorage.setItem(_teamIdKey, teamId);
+}
 
 export const SessionService = {
   login,
   logOut,
-  getTeamId
+  getTeamId,
+  setUsersActiveTeam
 }
