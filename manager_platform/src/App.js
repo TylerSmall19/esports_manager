@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { LoginChoices } from './components/LoginChoices.tsx';
-import { NewOrgSignup } from './components/teamCreation/NewOrgSignup.tsx';
+import { NewTeamSignup } from './components/teamCreation/NewTeamForm.tsx';
 import {
   BrowserRouter as Router,
   Switch,
@@ -22,7 +22,7 @@ const App = () => {
         <Switch>
           <Route path={appRoutes.players.scouting} component={PlayerInfoList} />
 
-          <Route path={appRoutes.orgs.signUp} component={NewOrgSignup} />
+          <Route path={appRoutes.orgs.signUp} component={NewTeamSignup} />
         </Switch>
       </div>
     </Router>

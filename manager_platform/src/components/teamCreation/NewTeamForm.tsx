@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const NewOrgSignup = () => {
-  const handleOrgSubmit = (vals : any) => (e : Event) => {
+const NewTeamSignup = () => {
+  const handleTeamSubmit = (vals : any) => (e : Event) => {
     e.preventDefault();
 
     console.log(vals);
@@ -9,9 +9,9 @@ const NewOrgSignup = () => {
 
   return (
     <div>
-      <h3>First, let's get some basics about your Org</h3>
+      <h3>First, let's get some basics about your Team</h3>
       <br />
-      <NewOrgDetails onSubmit={handleOrgSubmit} />
+      <NewTeamDetails onSubmit={handleTeamSubmit} />
     </div>
   );
 };
@@ -22,7 +22,7 @@ type FormValues = {
   tag: string;
 }
 
-const NewOrgDetails = (props : any) => {
+const NewTeamDetails = (props : any) => {
   const { onSubmit } = props;
   const initialState : FormValues = { name: '', ownerName: '', tag: '' };
 
@@ -35,7 +35,7 @@ const NewOrgDetails = (props : any) => {
   return (
     <form onSubmit={onSubmit(formState)}>
       <div>
-        <label className='inputs' htmlFor='name'>Organization Name</label> 
+        <label className='inputs' htmlFor='name'>Team Name</label> 
         <br />
         <input id='name' type='text' name='name' value={formState.name || ''} onChange={setValue} />
       </div>
@@ -51,7 +51,7 @@ const NewOrgDetails = (props : any) => {
       <br />
 
       <div>
-        <label className='inputs' htmlFor='tag'>Org Tag</label>
+        <label className='inputs' htmlFor='tag'>Team Tag</label>
         <br />
         <input id='tag' name='tag' type='text' value={formState.tag || ''} onChange={setValue} />
       </div>
@@ -65,4 +65,4 @@ const NewOrgDetails = (props : any) => {
   );
 }
 
-export { NewOrgSignup };
+export { NewTeamSignup };
