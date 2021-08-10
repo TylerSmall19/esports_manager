@@ -1,0 +1,9 @@
+.container {
+  background: steelblue;
+  margin-top: 5px;
+  padding: 10px;
+}
+
+.playersContainer {
+  width: 80%;
+}

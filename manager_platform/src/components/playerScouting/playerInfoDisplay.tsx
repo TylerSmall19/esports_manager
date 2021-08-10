@@ -1,17 +1,19 @@
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, PropsWithChildren } from 'react';
 import { currencyFormatter, styleStatNumber } from '../../helpers/formatting/statFormattingHelper';
-import { GameApi } from '../../services/apiService/gameApi';
 import { PlayerInfo, PlayerStat } from '../../types/playerInfo';
 import { Team } from '../../types/team';
 import styles from './playerInfoDisplay.module.css';
 
 type PlayerProps = {
   player: PlayerInfo;
-  activeTeam: Team | null;
-  recruitButtonClicked: (player: PlayerInfo) => MouseEventHandler<HTMLElement>;
+  activeTeam?: Team | null;
+  recruitButtonClicked?: (player: PlayerInfo) => MouseEventHandler<HTMLElement>;
 }
 
-export const PlayerInfoDisplay = ({player, activeTeam, recruitButtonClicked}: PlayerProps) => {
+// We need children in here
+type PlayersPropsWithChildren = PlayerProps & PropsWithChildren<PlayerProps>
+
+export const PlayerInfoDisplay = ({player, activeTeam, recruitButtonClicked, children}: PlayersPropsWithChildren) => {
   return (
     <div className={styles.playerContainer}>
       <h3 className={styles.playerHeader}>{player.firstName} "{player.ign}" {player.lastName} [{player.region}] [OVR: {styleStatNumber(player.overall)}]</h3>
@@ -19,7 +21,7 @@ export const PlayerInfoDisplay = ({player, activeTeam, recruitButtonClicked}: Pl
       <hr />
 
       {Object.keys(player.stats).map(key => {
-        // @ts-ignore
+        // @ts-ignore this throws a TS error because keys aren't valid accessors, but I know this works, so ... we ignore it.
         const stat : PlayerStat = player.stats[key];
         return (<span key={key} className={styles.playerStat}>
           {stat.displayName}: {styleStatNumber(stat.value, stat.isPositive)}
@@ -33,11 +35,7 @@ export const PlayerInfoDisplay = ({player, activeTeam, recruitButtonClicked}: Pl
       <br />
       <br />
 
-      {/* Add some checks to make sure the players can't recruit past 5 members client side */}
-      {
-        activeTeam
-          && <button disabled={ GameApi.teamIsAtMaxPlayers(activeTeam) } onClick={recruitButtonClicked(player)}>Recruit Player to {activeTeam?.name}</button>
-      }
+      {children}
     </div>
   );
 };
