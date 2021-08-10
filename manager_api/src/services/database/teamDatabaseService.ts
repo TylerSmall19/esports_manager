@@ -53,4 +53,22 @@ export class TeamDatabaseService extends BaseDbService{
       this._databaseClient.close();
     }
   }
+
+  async getTeamById (teamId : string) : Promise<Team> {
+    try {
+      await this._databaseClient.connect();
+      const collection = this._databaseClient.db(this._dbName).collection(this._collectionName);
+
+      const team = await collection.findOne<Team>({_id: new ObjectId(teamId) });
+
+      return(team);
+    }
+    catch (err) {
+      this._logger.logError(`Error getting team ${teamId}: ${JSON.stringify(err)}`);
+      return null;
+    }
+    finally {
+      this._databaseClient.close();
+    }
+  }
 }
