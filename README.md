@@ -45,7 +45,7 @@ playing games on stream. Now let's learn more about the different types of pract
 
 Practicing solo means each member of your team is playing by themselves and practicing their own skills. This method won't build any team skills, but more on that later.
 
-For now, let's look at the improvement of skills for the solo practice. These can be broken down into 3 categories: **maintain** **improve** and **decaying**. Each
+For now, let's look at the improvement of skills for the solo practice. These can be broken down into 3 categories: **maintain** **improve** and **decay**. Each
 practice you get to set your skill targets. You can choose 1 skills to improve, 2 to maintain, and 2 to decay. Balancing these types of practice while still allowing
 your player time for matches, team practices, and streaming for revenue is a skillful dance, but what do these types mean?
 
