@@ -2,6 +2,7 @@ import { BaseDbService } from "./baseDbService";
 import { Team } from "../../types/team";
 import { ObjectId } from "mongodb";
 import { ScoutablePlayersDatabaseService } from "./scoutablePlayerDatabaseService";
+import { PlayerInfo } from "../../types/playerInfo";
 
 export class TeamDatabaseService extends BaseDbService{
 
@@ -64,6 +65,24 @@ export class TeamDatabaseService extends BaseDbService{
       const team = await collection.findOne<Team>({_id: new ObjectId(teamId) });
 
       return(team);
+    }
+    catch (err) {
+      this._logger.logError(`Error getting team ${teamId}: ${JSON.stringify(err)}`);
+      return null;
+    }
+    finally {
+      this._databaseClient.close();
+    }
+  }
+
+  async getTeamPlayersByTeamId (teamId : string) : Promise<PlayerInfo[]> {
+    try {
+      const team = await this.getTeamById(teamId);
+
+      const playersDb = new ScoutablePlayersDatabaseService();
+      const players = await playersDb.getManyPlayersByIds(team.playerIds);
+
+      return(players);
     }
     catch (err) {
       this._logger.logError(`Error getting team ${teamId}: ${JSON.stringify(err)}`);

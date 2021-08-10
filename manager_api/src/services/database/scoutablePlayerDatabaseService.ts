@@ -52,6 +52,34 @@ class ScoutablePlayersDatabaseService extends BaseDbService{
     }
   }
 
+  public async getManyPlayersByIds(playerIds: string[]) : Promise<PlayerInfo[]> {
+    try {
+      await this._databaseClient.connect();
+
+      const collection = this._databaseClient.db(this._dbName).collection(this._collectionName);
+      var res = await collection
+        .find<PlayerInfo>(
+          {
+            // The TS implementation of mongoDb does not like this method, even though it's the correct way to search with arrays of objects.
+            // Seems related to https://github.com/DefinitelyTyped/DefinitelyTyped/issues/39358#issuecomment-546559564
+            // @ts-ignore
+            _id: { $in: ScoutablePlayersDatabaseService._mapStringsToObjectIds(playerIds) }
+          })
+        .toArray();
+
+      // Because the above line fails validation, the generic type gets messed up as well, so another ignore (*sigh*)
+      // @ts-ignore
+      return res;
+    }
+    catch (err) {
+      this._logger.logError(`Error fetching: ${JSON.stringify(err)}`);
+      return null;
+    }
+    finally {
+      this._databaseClient.close();
+    }
+  }
+
   public async setManyPlayerScoutableStatus(playerIds: string[], scoutable: boolean) : Promise<boolean> {
     try {
       await this._databaseClient.connect();

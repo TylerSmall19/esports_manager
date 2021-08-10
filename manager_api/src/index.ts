@@ -59,6 +59,19 @@ app.get('/teams/:teamId', async (req, res) => {
     }
 });
 
+app.get('/teams/:teamId/players', async (req, res) => {
+    const db = new TeamDatabaseService();
+    const dbRes = await db.getTeamPlayersByTeamId(req.params.teamId);
+
+    if (dbRes) {
+        res.json(dbRes);
+    }
+    else {
+        res.status(errorCode);
+        res.send();
+    }
+});
+
 // start the Express server
 app.listen( port, () => {
     console.log( `server started at http://localhost:${ port }` );
