@@ -27,11 +27,12 @@ export enum StatAffect {
 export type PlayerStatTraining = {
   // This can be a team ID or a player ID
   entityId: string;
-  statNameToTrain: PlayerStatType | TeamStatType;
+  statsToTrain: PlayerStatType[] | TeamStatType[];
   statAffect: StatAffect;
 }
 
 export type TrainingRequest = {
+  _id: string;
   teamId: string;
   cycleTimeInMS: number;
   numberOfCyclesToTrain: number;
