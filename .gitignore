@@ -19,7 +19,7 @@ manager_platform/.env.local
 manager_platform/.env.development.local
 manager_platform/.env.test.local
 manager_platform/.env.production.local
-manager_api/.env
+*/.env
 
 manager_platform/npm-debug.log*
 manager_platform/yarn-debug.log*
