@@ -1,6 +1,23 @@
 import { StatUpdateMapping } from "../types/statUpdateMapping";
-import { PlayerStatType, StatAffect, TrainingTypes } from "../types/trainingRequest";
+import { PlayerStatTraining, PlayerStatType, StatAffect, TrainingRequest, TrainingTypes } from "../types/trainingRequest";
+import * as db from "./database/trainingDatabaseService";
 import * as trainingService from "./trainingService";
+
+jest.mock('./database/trainingDatabaseService', () => {
+  return {
+    TrainingDatabaseService: jest.fn().mockImplementation(() => {
+       return mockDbService;
+    })
+  };
+});
+
+const mockTrainings = [{ entityId: 'foo', statAffect: StatAffect.improve, statsToTrain: [] }] as PlayerStatTraining[];
+
+const mockDbService = {
+  pullTrainingQueue: jest.fn(async () => ([
+    { statTrainings: mockTrainings, trainingType: TrainingTypes.solo }
+  ] as TrainingRequest[]))
+};
 
 describe('trainingService', () => {
   describe('MapPlayerStatChanges', () => {
@@ -130,6 +147,21 @@ describe('trainingService', () => {
 
       const actual = trainingService.handleSoloTraining([playerStatTraining, {...playerStatTraining, entityId: 'bar', statAffect: StatAffect.maintain}]);
       expect(actual).toEqual(expectedOutput);
+    });
+  });
+  describe('BeginTraining', () => {
+    test('it calls the DB to pull the training queue', () => {
+      expect(mockDbService.pullTrainingQueue).not.toBeCalled();
+      trainingService.beginTraining();
+      expect(mockDbService.pullTrainingQueue).toBeCalled();
+    });
+
+    test('it calls the handle solo method with proper args when given the type', async () => {
+      const spy = jest.spyOn(trainingService, 'handleSoloTraining');
+
+      expect(spy).not.toBeCalled();
+      await trainingService.beginTraining();
+      expect(spy).toBeCalledWith(mockTrainings);
     });
   });
 });

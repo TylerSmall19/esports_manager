@@ -13,10 +13,11 @@ import { TrainingDatabaseService } from "./database/trainingDatabaseService"
 // Stream Practice
 // 
 
+// Map the enums to some config values that drive the player growth
 export const PRACTICE_VALUES = {
   [TrainingTypes.solo]: { [StatAffect.maintain]: 0, [StatAffect.decay]: -.25, [StatAffect.improve]: .5 },
-  [TrainingTypes.team]: { [StatAffect.maintain]: 0, [StatAffect.decay]: 0, [StatAffect.improve]: 0 },
-  [TrainingTypes.stream]: { [StatAffect.maintain]: 0, [StatAffect.decay]: 0, [StatAffect.improve]: 0 }
+  [TrainingTypes.team]: { [StatAffect.maintain]: 0, [StatAffect.decay]: -.2, [StatAffect.improve]: .5 },
+  [TrainingTypes.stream]: { [StatAffect.maintain]: 0, [StatAffect.decay]: -.1, [StatAffect.improve]: .2 }
 };
 
 export const mapPlayerStatChanges = (statToTrain : PlayerStatType | TeamStatType, statAffect : StatAffect, entityId: string, trainingType: TrainingTypes) : PlayerUpdateMapping => 
@@ -34,7 +35,7 @@ export const mapPlayerStatChanges = (statToTrain : PlayerStatType | TeamStatType
 export const handleSoloTraining = (trainings : PlayerStatTraining[]) : StatUpdateMapping => {
   let statUpdateMapping = { playerUpdates: [] } as StatUpdateMapping;
 
-  const mapping = trainings.forEach(tr => {
+  trainings.forEach(tr => {
     tr.statsToTrain.forEach((stat : PlayerStatType | TeamStatType) => {
       statUpdateMapping.playerUpdates.push(mapPlayerStatChanges(stat, tr.statAffect, tr.entityId, TrainingTypes.solo));
     });
@@ -45,7 +46,6 @@ export const handleSoloTraining = (trainings : PlayerStatTraining[]) : StatUpdat
 
 export const beginTraining = async () => {
   const db = new TrainingDatabaseService();
-
   const trainingList =  await db.pullTrainingQueue();
 
   trainingList?.forEach(training => {
@@ -53,7 +53,7 @@ export const beginTraining = async () => {
       case TrainingTypes.solo:
         handleSoloTraining(training.statTrainings);
         break;
-      
+
       default:
         break;
     }
