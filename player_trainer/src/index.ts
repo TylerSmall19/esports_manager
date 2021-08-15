@@ -1,12 +1,13 @@
 import { config } from "dotenv";
+import { TrainingDatabaseService } from "./services/database/trainingDatabaseService";
 import { beginTraining } from "./services/trainingService";
 
 config();
 
-const trainingHandler = () => {
+const trainingHandler = (db : TrainingDatabaseService) => () => {
   console.log('Beginning training');
-  beginTraining();
+  beginTraining(db);
 }
 
-trainingHandler();
-setInterval(trainingHandler, 5 * 60 * 1000);
+const db = new TrainingDatabaseService();
+setInterval(trainingHandler(db), .2 * 60 * 1000);
