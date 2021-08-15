@@ -8,15 +8,15 @@ class ProjectLogger {
       this.logger = console;
   }
 
-  logInfo(msg: object, system : string = 'unspecified') {
+  logInfo(msg: any, system : string = 'unspecified') {
     this.logger.info(`INFO: SYSTEM: ${system} `, msg);
   }
 
-  logError(err: object, system : string = 'unspecified') {
+  logError(err: any, system : string = 'unspecified') {
     this.logger.error(`Error: SYSTEM: ${system}`, err);
   }
 
-  logWarning(warn: object, system : string = 'unspecified') {
+  logWarning(warn: any, system : string = 'unspecified') {
     this.logger.warn(`WARN: SYSTEM: ${system}`, warn);
   }
 }
