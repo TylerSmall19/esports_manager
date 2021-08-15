@@ -1,4 +1,4 @@
-import { StatUpdateMapping } from "../types/statUpdateMapping";
+import { PlayerUpdateMapping, StatUpdateMapping } from "../types/statUpdateMapping";
 import { PlayerStatTraining, PlayerStatType, StatAffect, TrainingRequest, TrainingTypes } from "../types/trainingRequest";
 import * as db from "./database/trainingDatabaseService";
 import * as trainingService from "./trainingService";
@@ -15,11 +15,18 @@ const mockTrainings = [{ entityId: 'foo', statAffect: StatAffect.improve, statsT
 
 const mockDbService = {
   pullTrainingQueue: jest.fn(async () => ([
-    { statTrainings: mockTrainings, trainingType: TrainingTypes.solo }
-  ] as TrainingRequest[]))
+    { _id: 'foo-training', statTrainings: mockTrainings, trainingType: TrainingTypes.solo },
+    { _id: 'bar-training', statTrainings: mockTrainings, trainingType: TrainingTypes.solo }
+  ] as TrainingRequest[])),
+  trainStats: jest.fn(() => true),
+  removeTrainingRequestById: jest.fn(), 
+  trainPlayerStat: jest.fn()
 };
 
 describe('trainingService', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  })
   describe('MapPlayerStatChanges', () => {
     describe('solo training', () => {
       test('calculates correct values for `improve` stats', () => {
@@ -62,7 +69,7 @@ describe('trainingService', () => {
       });
     });
   });
-  describe('HandleSoloTraining', () => {
+  describe('generateTrainings', () => {
     test('gives the expected output when 1 valid statTraining is given', () => {
       const spy = jest.spyOn(trainingService, 'mapPlayerStatChanges');
       const playerStatTraining = { entityId: 'foo', statAffect: StatAffect.improve, statsToTrain: [PlayerStatType.awareness] };
@@ -74,7 +81,7 @@ describe('trainingService', () => {
         }]
       } as StatUpdateMapping;
 
-      const actual = trainingService.handleSoloTraining([playerStatTraining]);
+      const actual = trainingService.generateTrainings([playerStatTraining], TrainingTypes.solo);
       expect(actual).toEqual(expectedOutput);
     });
 
@@ -94,7 +101,7 @@ describe('trainingService', () => {
         }]
       } as StatUpdateMapping;
 
-      const actual = trainingService.handleSoloTraining([playerStatTraining, { entityId: 'foo', statAffect: StatAffect.improve, statsToTrain: [PlayerStatType.mechanics] }]);
+      const actual = trainingService.generateTrainings([playerStatTraining, { entityId: 'foo', statAffect: StatAffect.improve, statsToTrain: [PlayerStatType.mechanics] }], TrainingTypes.solo);
       expect(actual).toEqual(expectedOutput);
     });
 
@@ -114,7 +121,7 @@ describe('trainingService', () => {
         }]
       } as StatUpdateMapping;
 
-      const actual = trainingService.handleSoloTraining([playerStatTraining]);
+      const actual = trainingService.generateTrainings([playerStatTraining], TrainingTypes.solo);
       expect(actual).toEqual(expectedOutput);
     });
 
@@ -145,23 +152,51 @@ describe('trainingService', () => {
       ]
       } as StatUpdateMapping;
 
-      const actual = trainingService.handleSoloTraining([playerStatTraining, {...playerStatTraining, entityId: 'bar', statAffect: StatAffect.maintain}]);
+      const actual = trainingService.generateTrainings([playerStatTraining, {...playerStatTraining, entityId: 'bar', statAffect: StatAffect.maintain}], TrainingTypes.solo);
       expect(actual).toEqual(expectedOutput);
     });
   });
   describe('BeginTraining', () => {
     test('it calls the DB to pull the training queue', () => {
       expect(mockDbService.pullTrainingQueue).not.toBeCalled();
-      trainingService.beginTraining();
+      trainingService.beginTraining(new db.TrainingDatabaseService());
       expect(mockDbService.pullTrainingQueue).toBeCalled();
     });
 
     test('it calls the handle solo method with proper args when given the type', async () => {
-      const spy = jest.spyOn(trainingService, 'handleSoloTraining');
+      const spy = jest.spyOn(trainingService, 'generateTrainings');
 
       expect(spy).not.toBeCalled();
-      await trainingService.beginTraining();
-      expect(spy).toBeCalledWith(mockTrainings);
+      await trainingService.beginTraining(new db.TrainingDatabaseService());
+      expect(spy).toBeCalledWith(mockTrainings, TrainingTypes.solo);
     });
+
+    test('it calls the trainStat function for each pulled training from db', async () => {
+      const mockGenerator = jest.spyOn(trainingService, 'generateTrainings');
+      const mockTrainingsImpl = () => ({ playerUpdates: 
+        [
+          { entityId: 'foo', modifierToAdd: .5, statToChange: PlayerStatType.mechanics },
+          { entityId: 'bar', modifierToAdd: .25, statToChange: PlayerStatType.leadership },
+        ] as PlayerUpdateMapping[] 
+      } as StatUpdateMapping);
+      mockGenerator.mockImplementation(mockTrainingsImpl);
+
+      const expectedFunc = jest.spyOn(trainingService, 'trainStats');
+
+      expect(expectedFunc).not.toBeCalled();
+      await trainingService.beginTraining(new db.TrainingDatabaseService());
+      expect(expectedFunc).toBeCalledTimes(2);
+    });
+
+    test('it calls removeTrainingRequestById with the correct IDs', async () => {
+      expect(mockDbService.removeTrainingRequestById).not.toBeCalled();
+      await trainingService.beginTraining(new db.TrainingDatabaseService());
+      expect(mockDbService.removeTrainingRequestById).toBeCalledTimes(2);
+      expect(mockDbService.removeTrainingRequestById).toHaveBeenNthCalledWith(1, 'foo-training');
+      expect(mockDbService.removeTrainingRequestById).toHaveBeenNthCalledWith(2, 'bar-training');
+    });
+  });
+  describe('trainStats', () => {
+    
   });
 });

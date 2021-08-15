@@ -1,11 +1,11 @@
 import { PlayerUpdateMapping, StatUpdateMapping } from "../types/statUpdateMapping";
-import { PlayerStatTraining, PlayerStatType, StatAffect, TeamStatType, TrainingRequest, TrainingTypes } from "../types/trainingRequest";
+import { PlayerStatTraining, PlayerStatType, StatAffect, TeamStatType, TrainingTypes } from "../types/trainingRequest";
 import { TrainingDatabaseService } from "./database/trainingDatabaseService"
 
 // Solo Practice
-// - "Maintain" skills stay where they are each cycle -- 0
-// - "Improve" skills go up by 2 every 3 cycles       -- .666
-// - "Decaying" skills go down by 1 every 2 cycles    -- .5
+// - "Maintain" skills stay where they are 
+// - "Improve" skills go up by .5 every cycle
+// - "Decaying" skills go down by .25 every cycles
 
 // Team Practice
 // 
@@ -32,30 +32,31 @@ export const mapPlayerStatChanges = (statToTrain : PlayerStatType | TeamStatType
   return mapping;
 }
 
-export const handleSoloTraining = (trainings : PlayerStatTraining[]) : StatUpdateMapping => {
+export const generateTrainings = (trainings : PlayerStatTraining[], trainingType : TrainingTypes) : StatUpdateMapping => {
   let statUpdateMapping = { playerUpdates: [] } as StatUpdateMapping;
 
   trainings.forEach(tr => {
     tr.statsToTrain.forEach((stat : PlayerStatType | TeamStatType) => {
-      statUpdateMapping.playerUpdates.push(mapPlayerStatChanges(stat, tr.statAffect, tr.entityId, TrainingTypes.solo));
+      statUpdateMapping.playerUpdates.push(mapPlayerStatChanges(stat, tr.statAffect, tr.entityId, trainingType));
     });
   });
 
   return statUpdateMapping;
 };
 
-export const beginTraining = async () => {
-  const db = new TrainingDatabaseService();
+export const trainStats = async (mapping : StatUpdateMapping, db : TrainingDatabaseService) => {
+  mapping.playerUpdates.forEach(async (update) => {
+    await db.trainPlayerStat(update);
+  });
+}
+
+export const beginTraining = async (db : TrainingDatabaseService) => {
   const trainingList =  await db.pullTrainingQueue();
 
-  trainingList?.forEach(training => {
-    switch (training.trainingType) {
-      case TrainingTypes.solo:
-        handleSoloTraining(training.statTrainings);
-        break;
-
-      default:
-        break;
-    }
+  trainingList?.forEach(async training => {
+    // Create the trainings listings
+    // Alter the player stats according to the generated mappings
+    await trainStats(generateTrainings(training.statTrainings, training.trainingType), db);
+    await db.removeTrainingRequestById(training._id);
   });
 };
