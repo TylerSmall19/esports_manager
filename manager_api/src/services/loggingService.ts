@@ -8,16 +8,16 @@ class ProjectLogger {
       this.logger = console;
   }
 
-  logInfo(msg: string) {
-    this.logger.info(`INFO: ${msg}`);
+  logInfo(msg: object, system : string = 'unspecified') {
+    this.logger.info(`INFO: SYSTEM: ${system} `, msg);
   }
 
-  logError(err: string) {
-    this.logger.error(`Error: ${JSON.stringify(err)}`);
+  logError(err: object, system : string = 'unspecified') {
+    this.logger.error(`Error: SYSTEM: ${system}`, err);
   }
 
-  logWarning(warn: string) {
-    this.logger.warn(`WARN: ${warn}`);
+  logWarning(warn: object, system : string = 'unspecified') {
+    this.logger.warn(`WARN: SYSTEM: ${system}`, warn);
   }
 }
 
