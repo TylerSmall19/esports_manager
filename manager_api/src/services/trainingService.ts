@@ -26,34 +26,29 @@ function hasDuplicates(array : any[]) {
 }
 
 export const validatePlayerAssignments = (assignment : TrainingAssignment) : boolean => {
-  try {
-    if (assignment.statsToDecay.length !== TRAINING_CONFIG.statsToDecayCount)
-      throw new Error();
+  if (assignment.statsToDecay.length !== TRAINING_CONFIG.statsToDecayCount)
+    throw new Error('Incorrect decay count');
 
-    if (assignment.statsToImprove.length !== TRAINING_CONFIG.statsToImproveCount)
-        throw new Error();
+  if (assignment.statsToImprove.length !== TRAINING_CONFIG.statsToImproveCount)
+      throw new Error('Incorrect improve count');
 
-    if (assignment.statsToMaintain.length !== TRAINING_CONFIG.statsToMaintainCount)
-        throw new Error();
+  if (assignment.statsToMaintain.length !== TRAINING_CONFIG.statsToMaintainCount)
+      throw new Error('Incorrect maintain count');
 
-    const completeStats = assignment.statsToDecay.concat(assignment.statsToImprove, assignment.statsToMaintain);
+  const completeStats = assignment.statsToDecay.concat(assignment.statsToImprove, assignment.statsToMaintain);
 
-    if (hasDuplicates(completeStats))
-      throw new Error();
+  if (hasDuplicates(completeStats))
+    throw new Error('Duplicate stat found');
 
-    if (completeStats.length !== TRAINING_CONFIG.statsToAffectMax)
-      throw new Error();
+  if (completeStats.length !== TRAINING_CONFIG.statsToAffectMax)
+    throw new Error('Too many stats given');
 
-    completeStats.forEach(stat => {
-      if (!TRAINING_CONFIG.trainableStats.includes(stat))
-        throw new Error();
-    });
+  completeStats.forEach(stat => {
+    if (!TRAINING_CONFIG.trainableStats.includes(stat))
+      throw new Error('Non-trainable stat given');
+  });
 
-    return true;
-  }
-  catch (err) {
-    return false;
-  }
+  return true;
 }
 
 export const trainPlayers = (teamId: string, trainingType: TrainingTypes, playerAssignments: TrainingAssignment[]) => {
@@ -68,16 +63,19 @@ export const trainPlayers = (teamId: string, trainingType: TrainingTypes, player
   } as TrainingRequest;
 
   playerAssignments.forEach((assignment) => {
-    // Check if they're valid and assign if they are. Otherwise don't touch them
-    if (validatePlayerAssignments(assignment)) {
-      request.statTrainings.push({ entityId: assignment.playerId, statAffect: StatAffect.improve, statsToTrain: assignment.statsToImprove });
-      request.statTrainings.push({ entityId: assignment.playerId, statAffect: StatAffect.decay, statsToTrain: assignment.statsToDecay });
-      request.statTrainings.push({ entityId: assignment.playerId, statAffect: StatAffect.maintain, statsToTrain: assignment.statsToMaintain });
+    try {
+      validatePlayerAssignments(assignment)
     }
-    else {
-      throw new Error(`Error with assignment validations: ${JSON.stringify(assignment)}`);
+    catch (err) {
+      console.error(err);
+      throw err;
     }
+
+    // Assign the stat changes if they pass validation
+    request.statTrainings.push({ entityId: assignment.playerId, statAffect: StatAffect.improve, statsToTrain: assignment.statsToImprove });
+    request.statTrainings.push({ entityId: assignment.playerId, statAffect: StatAffect.decay, statsToTrain: assignment.statsToDecay });
+    request.statTrainings.push({ entityId: assignment.playerId, statAffect: StatAffect.maintain, statsToTrain: assignment.statsToMaintain });
   });
 
-
+  // Add the assignments
 };
